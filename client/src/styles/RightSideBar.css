@@ -1,3 +1,11 @@
+.container2 {
+  opacity: 0; 
+  transition: opacity 1s ease-in; 
+}
+
+.container2.show {
+  opacity: 1; 
+}
 
 .container2 {
     border: 1px solid var(--black);
@@ -22,7 +30,6 @@
   }
   
 
-/* RightSideBar.css */
 
 .rectContainer {
     display: flex;

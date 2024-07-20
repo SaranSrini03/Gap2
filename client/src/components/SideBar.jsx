@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import '../styles/SideBar.css';
-import RightSideBar from './RightSideBar'; // Assuming you have a RightSideBar component
+import RightSideBar from './RightSideBar';
 
-const SideBar = () => {
-  // Function to format date as YYYY-MM-DD
+const SideBar = ({ onToggleRightSideBar }) => {
   const formatDate = (date) => {
     const year = date.getFullYear();
     let month = date.getMonth() + 1;
@@ -19,26 +18,37 @@ const SideBar = () => {
     return `${year}-${month}-${day}`;
   };
 
-  // Function to calculate 10 years before today's date
   const getTenYearsBeforeDate = () => {
     const today = new Date();
     today.setFullYear(today.getFullYear() - 10);
     return formatDate(today);
   };
 
-  // Function to get today's date
   const getTodayDate = () => {
     const today = new Date();
     return formatDate(today);
   };
 
-  // State for holding input values and RightSideBar visibility
   const [tickerName, setTickerName] = useState('');
-  const [showRightSideBar, setShowRightSideBar] = useState(false); // Initially hidden
+  const [startDate, setStartDate] = useState(getTenYearsBeforeDate());
+  const [endDate, setEndDate] = useState(getTodayDate());
 
-  // Function to handle button click to reveal RightSideBar
-  const handleButtonClick = () => {
-    setShowRightSideBar(!showRightSideBar); // Toggle the state
+  // Handle date validation to ensure endDate is after startDate
+  const handleDateChange = (e) => {
+    const { name, value } = e.target;
+    if (name === 'startDate') {
+      if (new Date(value) <= new Date(endDate)) {
+        setStartDate(value);
+      } else {
+        alert('Start date must be before end date');
+      }
+    } else if (name === 'endDate') {
+      if (new Date(value) >= new Date(startDate)) {
+        setEndDate(value);
+      } else {
+        alert('End date must be after start date');
+      }
+    }
   };
 
   return (
@@ -55,20 +65,19 @@ const SideBar = () => {
         <p>Start Date</p>
         <input
           type="date"
-          placeholder={`YYYY-MM-DD (e.g., ${getTenYearsBeforeDate()})`}
-          value={getTenYearsBeforeDate()}
-          onChange={() => {}}
+          name="startDate"
+          value={startDate}
+          onChange={handleDateChange}
         />
         <p>End Date</p>
         <input
           type="date"
-          placeholder={`YYYY-MM-DD (e.g., ${getTodayDate()})`}
-          value={getTodayDate()}
-          onChange={() => {}}
+          name="endDate"
+          value={endDate}
+          onChange={handleDateChange}
         />
-        <button onClick={handleButtonClick}>Get Backtest Strategy</button>
+        <button onClick={onToggleRightSideBar}>Toggle Right Sidebar</button>
       </div>
-      {showRightSideBar && <RightSideBar />}
     </div>
   );
 };

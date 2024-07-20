@@ -9,7 +9,7 @@ const PieChart = ({ chartData }) => {
       type: 'pie',
     },
     title: {
-      text: 'Browser market shares in January, 2024',
+      text: 'PieChart data',
     },
     series: [
       {
